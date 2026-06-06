@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust - 漫游者 | 探索世界，自由无界</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        warm: '#FFD700',
+                        surface: '#F5F7FA',
+                        'mid-gray': '#909399',
+                        'dark-gray': '#303133',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-soft': 'pulseSoft 4s ease-in-out infinite',
+                        'twinkle': 'twinkle 3s ease-in-out infinite',
+                        'flicker': 'flicker 2s ease-in-out infinite',
+                        'star-rotate': 'starRotate 120s linear infinite',
+                        'snow-fall': 'snowFall 8s linear infinite',
+                        'lamp-flicker': 'lampFlicker 3s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'drift': 'drift 20s ease-in-out infinite alternate',
+                        'aurora-shift': 'auroraShift 8s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        },
+                        pulseSoft: {
+                            '0%, 100%': { opacity: '0.7' },
+                            '50%': { opacity: '1' },
+                        },
+                        twinkle: {
+                            '0%, 100%': { opacity: '0.4' },
+                            '50%': { opacity: '1' },
+                        },
+                        flicker: {
+                            '0%, 100%': { opacity: '0.85' },
+                            '30%': { opacity: '0.95' },
+                            '60%': { opacity: '0.75' },
+                            '80%': { opacity: '0.9' },
+                        },
+                        starRotate: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' },
+                        },
+                        snowFall: {
+                            '0%': { transform: 'translateY(-10vh) translateX(0)', opacity: '0' },
+                            '10%': { opacity: '1' },
+                            '90%': { opacity: '1' },
+                            '100%': { transform: 'translateY(105vh) translateX(40px)', opacity: '0' },
+                        },
+                        lampFlicker: {
+                            '0%, 100%': { opacity: '0.9', transform: 'scale(1)' },
+                            '25%': { opacity: '0.95', transform: 'scale(1.03)' },
+                            '50%': { opacity: '0.85', transform: 'scale(0.97)' },
+                            '75%': { opacity: '0.92', transform: 'scale(1.01)' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(30px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        drift: {
+                            '0%': { transform: 'translateX(-2%) scale(1.05)' },
+                            '100%': { transform: 'translateX(2%) scale(1.1)' },
+                        },
+                        auroraShift: {
+                            '0%, 100%': { transform: 'translateX(-5%) skewX(-2deg)', opacity: '0.6' },
+                            '25%': { transform: 'translateX(3%) skewX(1deg)', opacity: '0.8' },
+                            '50%': { transform: 'translateX(8%) skewX(-3deg)', opacity: '0.55' },
+                            '75%': { transform: 'translateX(-2%) skewX(2deg)', opacity: '0.75' },
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #165DFF;
+            --warm: #FFD700;
+            --surface: #F5F7FA;
+            --mid-gray: #909399;
+            --dark-gray: #303133;
+            --transition-speed: 0.9s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            touch-action: pan-y;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* ========== 主容器 ========== */
+        #main-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ========== 全景页面 ========== */
+        .panorama-page {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform var(--transition-speed) cubic-bezier(0.65, 0, 0.35, 1),
+                opacity var(--transition-speed) cubic-bezier(0.65, 0, 0.35, 1);
+            will-change: transform, opacity;
+            overflow: hidden;
+        }
+
+        .panorama-page.active {
+            transform: translateY(0);
+            opacity: 1;
+            z-index: 10;
+            pointer-events: all;
+        }
+        .panorama-page.above {
+            transform: translateY(-100vh);
+            opacity: 0.3;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .panorama-page.below {
+            transform: translateY(100vh);
+            opacity: 0.3;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .panorama-page.hidden-page {
+            transform: translateY(0);
+            opacity: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* ========== 背景图 ========== */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            animation: drift 20s ease-in-out infinite alternate;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            transition: all 1.5s ease;
+        }
+
+        /* ========== 第一页 - 昼夜循环叠加层 ========== */
+        #page1-sky-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            transition: background 1.2s ease;
+            background: linear-gradient(180deg,
+                    rgba(10, 20, 50, 0.55) 0%,
+                    rgba(15, 25, 60, 0.4) 30%,
+                    rgba(20, 30, 55, 0.35) 60%,
+                    rgba(10, 15, 30, 0.7) 100%);
+        }
+
+        #page1-light-rays {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            background: radial-gradient(ellipse at 50% 15%, rgba(255, 200, 100, 0.35) 0%, rgba(255, 150, 60, 0.12) 35%, transparent 70%);
+        }
+
+        /* ========== Canvas层 ========== */
+        .particle-canvas {
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 过渡粒子层 */
+        #transition-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* ========== 内容层 ========== */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* ========== Logo ========== */
+        .logo-wanderlust {
+            font-family: 'Inter', sans-serif;
+            font-weight: 200;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.4), 0 0 70px rgba(180, 200, 255, 0.3);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            font-size: 1.8rem;
+            z-index: 20;
+        }
+        .logo-wanderlust:hover {
+            transform: rotate(15deg);
+            color: #fff;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.8), 0 0 90px rgba(200, 220, 255, 0.6);
+        }
+
+        /* ========== 搜索框 ========== */
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 9999px;
+            color: #fff;
+            font-size: 1rem;
+            padding: 14px 28px;
+            width: 100%;
+            max-width: 500px;
+            outline: none;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 20;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.03em;
+            text-align: center;
+        }
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 300;
+        }
+        .search-box:focus {
+            border-color: rgba(100, 160, 255, 0.7);
+            box-shadow: 0 0 35px rgba(22, 93, 255, 0.4), 0 0 70px rgba(22, 93, 255, 0.18);
+            transform: scale(1.04);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ========== 搜索建议下拉 ========== */
+        .search-suggestions {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            right: 0;
+            background: rgba(25, 30, 48, 0.96);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 16px;
+            overflow: hidden;
+            z-index: 30;
+            max-height: 320px;
+            overflow-y: auto;
+            animation: slideUp 0.35s ease-out;
+            display: none;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+        .suggestion-item {
+            padding: 13px 22px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .suggestion-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .suggestion-item img {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        /* ========== 导航按钮 ========== */
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.85);
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            font-size: 0.85rem;
+        }
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: #165DFF;
+            border-color: transparent;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), 0 0 22px rgba(22, 93, 255, 0.3);
+        }
+        .nav-btn:active {
+            transform: translateY(-1px) scale(0.93);
+            transition: all 0.1s ease;
+        }
+
+        /* ========== 页面指示器 ========== */
+        #page-indicator {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .indicator-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 2px solid transparent;
+            position: relative;
+        }
+        .indicator-dot:hover {
+            background: rgba(255, 255, 255, 0.7);
+            transform: scale(1.4);
+        }
+        .indicator-dot.active {
+            background: #fff;
+            border-color: rgba(255, 215, 0, 0.7);
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.5);
+            transform: scale(1.3);
+            animation: float 2.5s ease-in-out infinite;
+        }
+        .indicator-dot .dot-label {
+            position: absolute;
+            right: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.7rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            letter-spacing: 0.05em;
+        }
+        .indicator-dot:hover .dot-label,
+        .indicator-dot.active .dot-label {
+            opacity: 1;
+        }
+
+        /* ========== 页面标题样式 ========== */
+        .page-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 200;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: #fff;
+            letter-spacing: 0.08em;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.35), 0 4px 30px rgba(0, 0, 0, 0.5);
+            animation: slideUp 1s ease-out;
+        }
+        .page-subtitle {
+            font-weight: 300;
+            font-size: clamp(0.9rem, 2vw, 1.15rem);
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.06em;
+            animation: slideUp 1.2s ease-out;
+        }
+
+        /* ========== 地点卡片 ========== */
+        .place-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            width: 180px;
+            flex-shrink: 0;
+        }
+        .place-card:hover {
+            transform: translateY(-10px) scale(1.04);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        .place-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            transition: filter 0.4s ease;
+        }
+        .place-card:hover img {
+            filter: brightness(1.2);
+        }
+        .place-card .card-info {
+            padding: 12px 14px;
+        }
+
+        /* ========== 底部提示 ========== */
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            animation: float 3s ease-in-out infinite;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .scroll-hint i {
+            font-size: 1.2rem;
+            animation: float 2.5s ease-in-out infinite;
+        }
+
+        /* ========== 光晕效果 ========== */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 3;
+            filter: blur(60px);
+            transition: all 1.5s ease;
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 768px) {
+            .logo-wanderlust {
+                font-size: 1.3rem;
+            }
+            .search-box {
+                max-width: 90vw;
+                font-size: 0.85rem;
+                padding: 12px 20px;
+            }
+            .nav-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 0.75rem;
+            }
+            .page-title {
+                font-size: 1.6rem;
+            }
+            .page-subtitle {
+                font-size: 0.8rem;
+            }
+            #page-indicator {
+                right: 8px;
+                gap: 10px;
+            }
+            .indicator-dot {
+                width: 8px;
+                height: 8px;
+            }
+            .place-card {
+                width: 140px;
+            }
+            .place-card img {
+                height: 90px;
+            }
+        }
+        @media (max-width: 480px) {
+            .place-card {
+                width: 120px;
+            }
+            .place-card img {
+                height: 75px;
+            }
+            .scroll-hint {
+                bottom: 16px;
+                font-size: 0.65rem;
+            }
+        }
+
+        /* ========== 滚动条 ========== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
+            background: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            padding: 12px 26px;
+            border-radius: 9999px;
+            z-index: 200;
+            font-size: 0.85rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+        #toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== 加载画面 ==================== -->
+    <div id="loader-overlay" style="position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity 0.6s ease;">
+        <div style="width:44px;height:44px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite;"></div>
+        <p style="color:rgba(255,255,255,0.5);font-family:'Inter',sans-serif;font-weight:300;letter-spacing:0.1em;font-size:0.85rem;">Wanderlust</p>
+        <style>
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+    </div>
+
+    <!-- ==================== 过渡粒子Canvas ==================== -->
+    <canvas id="transition-canvas"></canvas>
+
+    <!-- ==================== 主容器 ==================== -->
+    <div id="main-container">
+
+        <!-- ========== 第一页：雪山夜景 + 昼夜循环 ========== -->
+        <div class="panorama-page active" id="page-1" data-index="0">
+            <img class="bg-image" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="阿尔卑斯雪山" loading="eager">
+            <div id="page1-sky-overlay"></div>
+            <div id="page1-light-rays"></div>
+            <canvas class="particle-canvas" id="particles-page1"></canvas>
+            <!-- 帐篷光晕 -->
+            <div class="glow-orb" id="tent-glow-orb" style="bottom:22%;left:50%;width:160px;height:120px;background:radial-gradient(ellipse,rgba(255,180,50,0.5) 0%,rgba(255,140,30,0.2) 40%,transparent 70%);transform:translateX(-50%);animation:lampFlicker 3s ease-in-out infinite;"></div>
+            <!-- 内容 -->
+            <div class="content-layer" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+                <span class="logo-wanderlust" style="font-size:2rem;">Wanderlust</span>
+                <div style="position:relative;width:100%;max-width:500px;">
+                    <input type="text" id="search-input" class="search-box" placeholder="搜索世界上任何一个地方..." autocomplete="off">
+                    <div id="search-suggestions" class="search-suggestions"></div>
+                </div>
+                <p style="color:rgba(255,255,255,0.45);font-size:0.8rem;letter-spacing:0.06em;font-weight:300;">探索世界，自由无界</p>
+            </div>
+            <!-- 右上角按钮 -->
+            <div style="position:absolute;top:24px;right:24px;z-index:20;display:flex;flex-direction:column;gap:10px;">
+                <button class="nav-btn" title="收藏夹" onclick="toggleFavorites()"><i class="fa-solid fa-heart"></i></button>
+                <button class="nav-btn" title="用户" onclick="showUserInfo()"><i class="fa-solid fa-user"></i></button>
+            </div>
+            <!-- 底部滚动提示 -->
+            <div class="scroll-hint">
+                <i class="fa-solid fa-chevron-down"></i>
+                <span>向下滚动探索</span>
+            </div>
+        </div>
+
+        <!-- ========== 第二页：日出云海 ========== -->
+        <div class="panorama-page hidden-page" id="page-2" data-index="1">
+            <img class="bg-image" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="日出云海" loading="lazy" style="filter:brightness(0.7) saturate(0.9);">
+            <div style="position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(180deg,rgba(255,160,50,0.35) 0%,rgba(255,120,30,0.2) 25%,rgba(255,200,100,0.1) 50%,rgba(30,20,40,0.5) 100%);"></div>
+            <div class="glow-orb" style="top:12%;left:50%;width:300px;height:180px;background:radial-gradient(ellipse,rgba(255,200,80,0.55) 0%,rgba(255,150,40,0.3) 30%,rgba(255,100,20,0.08) 60%,transparent 75%);transform:translateX(-50%);animation:pulseSoft 5s ease-in-out infinite;"></div>
+            <canvas class="particle-canvas" id="particles-page2"></canvas>
+            <div class="content-layer" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+                <h1 class="page-title">日出 · 云海</h1>
+                <p class="page-subtitle">晨曦穿透云层，金色光芒洒满山巅</p>
+                <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:12px;">
+                    <div class="place-card" onclick="showPlaceToast('黄山日出','中国安徽')">
+                        <img src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=400&q=80" alt="黄山日出" loading="lazy">
+                        <div class="card-info"><h4 style="color:#fff;font-size:0.85rem;font-weight:500;">黄山日出</h4><p style="color:rgba(255,255,255,0.5);font-size:0.7rem;">中国 · 安徽</p></div>
+                    </div>
+                    <div class="place-card" onclick="showPlaceToast('富士山晨光','日本')">
+                        <img src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=400&q=80" alt="富士山" loading="lazy">
+                        <div class="card-info"><h4 style="color:#fff;font-size:0.85rem;font-weight:500;">富士山晨光</h4><p style="color:rgba(255,255,255,0.5);font-size:0.7rem;">日本</p></div>
+                    </div>
+                    <div class="place-card" onclick="showPlaceToast('泰山日出','中国山东')">
+                        <img src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=400&q=80" alt="泰山" loading="lazy">
+                        <div class="card-info"><h4 style="color:#fff;font-size:0.85rem;font-weight:500;">泰山日出</h4><p style="color:rgba(255,255,255,0.5);font-size:0.7rem;">中国 · 山东</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-hint"><i class="fa-solid fa-chevron-down"></i><span>继续探索</span></div>
+        </div>
+
+        <!-- ========== 第三页：日落海岸 ========== -->
+        <div class="panorama-page hidden-page" id="page-3" data-index="2">
+            <img class="bg-image" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80" alt="日落海滩" loading="lazy" style="filter:brightness(0.65) saturate(1.1);">
+            <div style="position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(180deg,rgba(200,80,30,0.4) 0%,rgba(180,60,20,0.3) 20%,rgba(255,140,60,0.15) 50%,rgba(20,15,40,0.6) 100%);"></div>
+            <div class="glow-orb" style="top:20%;left:50%;width:350px;height:200px;background:radial-gradient(ellipse,rgba(255,120,40,0.5) 0%,rgba(255,80,20,0.3) 35%,rgba(200,50,10,0.08) 65%,transparent 80%);transform:translateX(-50%);animation:pulseSoft 6s ease-in-out infinite;"></div>
+            <canvas class="particle-canvas" id="particles-page3"></canvas>
+            <div class="content-layer" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+                <h1 class="page-title">日落 · 海岸</h1>
+                <p class="page-subtitle">橙红天际线，海浪轻拍金色沙滩</p>
+                <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:12px;">
+                    <div class="place-card" onclick="showPlaceToast('马尔代夫日落','马尔代夫')">
+                        <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=400&q=80" alt="马尔代夫" loading="lazy">
+                        <div class="card-info"><h4 style="color:#fff;font-size:0.85rem;font-weight:500;">马尔代夫</h4><p style="color:rgba(255,255,255,0.5);font-size:0.7rem;">印度洋珍珠</p></div>
+                    </div>
+                    <div class="place-card" onclick="showPlaceToast('圣托里尼日落','希腊')">
+                        <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=400&q=80" alt="圣托里尼" loading="lazy">
+                        <div class="card-info"><h4 style="color:#fff;font-size:0.85rem;font-weight:500;">圣托里尼</h4><p style="color:rgba(255,255,255,0.5);font-size:0.7rem;">希腊 · 爱琴海</p></div>
+                    </div>
+                    <div class="place-card" onclick="showPlaceToast('巴厘岛日落','印度尼西亚')">
+                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&q=80" alt="巴厘岛" loading="lazy">
+                        <div class="card-info"><h4 style="color:#fff;font-size:0.85rem;font-weight:500;">巴厘岛</h4><p style="color:rgba(255,255,255,0.5);font-size:0.7rem;">印度尼西亚</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-hint"><i class="fa-solid fa-chevron-down"></i><span>继续探索</span></div>
+        </div>
+
+        <!-- ========== 第四页：极光星空 ========== -->
+        <div class="panorama-page hidden-page" id="page-4" data-index="3">
+            <img class="bg-image" src="https://images.unsplash.com/photo-1505322747495-6afdd3b70760?w=1920&q=80" alt="极光星空" loading="lazy" style="filter:brightness(0.55) saturate(1.3);">
+            <div style="position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(180deg,rgba(10,15,40,0.5) 0%,rgba(20,30,60,0.35) 30%,rgba(15,25,50,0.3) 60%,rgba(5,8,20,0.7) 100%);"></div>
+            <div class="glow-orb" style="top:15%;left:50%;width:400px;height:220px;background:radial-gradient(ellipse,rgba(100,220,150,0.4) 0%,rgba(80,180,200,0.25) 30%,rgba(60,120,180,0.1) 55%,transparent 75%);transform:translateX(-50%);animation:auroraShift 8s ease-in-out infinite;"></div>
+            <div class="glow-orb" style="top:25%;left:30%;width:250px;height:160px;background:radial-gradient(ellipse,rgba(180,140,220,0.3) 0%,rgba(140,100,200,0.15) 40%,transparent 70%);animation:auroraShift 10s ease-in-out infinite reverse;"></div>
+            <canvas class="particle-canvas" id="particles-page4"></canvas>
+            <div class="content-layer" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+                <h1 class="page-title">极光 · 星空</h1>
+                <p class="page-subtitle">北极光舞动，星河在夜空中缓缓旋转</p>
+                <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:12px;">
+                    <div class="place-card" onclick="showPlaceToast('冰岛极光','冰岛')">
+                        <img src="https://images.unsplash.com/photo-1476610182048-b716b8518aae?w=400&q=80" alt="冰岛极光" loading="lazy">
+                        <div class="card-info"><h4 style="color:#fff;font-size:0.85rem;font-weight:500;">冰岛极光</h4><p style="color:rgba(255,255,255,0.5);font-size:0.7rem;">北欧仙境</p></div>
+                    </div>
+                    <div class="place-card" onclick="showPlaceToast('挪威峡湾星空','挪威')">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="挪威" loading="lazy">
+                        <div class="card-info"><h4 style="color:#fff;font-size:0.85rem;font-weight:500;">挪威峡湾</h4><p style="color:rgba(255,255,255,0.5);font-size:0.7rem;">挪威</p></div>
+                    </div>
+                    <div class="place-card" onclick="showPlaceToast('阿拉斯加极光','美国')">
+                        <img src="https://images.unsplash.com/photo-1520769669658-f07657f5a307?w=400&q=80" alt="阿拉斯加" loading="lazy">
+                        <div class="card-info"><h4 style="color:#fff;font-size:0.85rem;font-weight:500;">阿拉斯加</h4><p style="color:rgba(255,255,255,0.5);font-size:0.7rem;">美国</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-hint" style="bottom:30px;">
+                <i class="fa-solid fa-arrow-up"></i>
+                <span>回到顶端</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 页面指示器 ==================== -->
+    <div id="page-indicator">
+        <div class="indicator-dot active" data-target="0"><span class="dot-label">雪山夜景</span></div>
+        <div class="indicator-dot" data-target="1"><span class="dot-label">日出云海</span></div>
+        <div class="indicator-dot" data-target="2"><span class="dot-label">日落海岸</span></div>
+        <div class="indicator-dot" data-target="3"><span class="dot-label">极光星空</span></div>
+    </div>
+
+    <!-- ==================== Toast ==================== -->
+    <div id="toast"></div>
+
+    <script>
+        (function() {
+            // ==================== 全局状态 ====================
+            const TOTAL_PAGES = 4;
+            let currentPage = 0;
+            let isTransitioning = false;
+            let transitionTimeout = null;
+            const TRANSITION_DURATION = 900; // ms
+
+            // ==================== DOM引用 ====================
+            const mainContainer = document.getElementById('main-container');
+            const pages = document.querySelectorAll('.panorama-page');
+            const indicatorDots = document.querySelectorAll('.indicator-dot');
+            const transitionCanvas = document.getElementById('transition-canvas');
+            const transitionCtx = transitionCanvas.getContext('2d');
+            const toast = document.getElementById('toast');
+            const loaderOverlay = document.getElementById('loader-overlay');
+            const searchInput = document.getElementById('search-input');
+            const searchSuggestions = document.getElementById('search-suggestions');
+            const page1SkyOverlay = document.getElementById('page1-sky-overlay');
+            const page1LightRays = document.getElementById('page1-light-rays');
+            const tentGlowOrb = document.getElementById('tent-glow-orb');
+
+            // 粒子canvas
+            const particleCanvases = {
+                0: document.getElementById('particles-page1'),
+                1: document.getElementById('particles-page2'),
+                2: document.getElementById('particles-page3'),
+                3: document.getElementById('particles-page4'),
+            };
+
+            // ==================== 地点数据库 ====================
+            const destinationsDB = [
+                { id: 'alps', name: '阿尔卑斯山', nameEn: 'Alps', country: '瑞士/法国/意大利',
+                    img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&q=80' },
+                { id: 'iceland', name: '冰岛极光', nameEn: 'Iceland Aurora', country: '冰岛',
+                    img: 'https://images.unsplash.com/photo-1505322747495-6afdd3b70760?w=200&q=80' },
+                { id: 'maldives', name: '马尔代夫', nameEn: 'Maldives', country: '马尔代夫',
+                    img: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=200&q=80' },
+                { id: 'guilin', name: '桂林山水', nameEn: 'Guilin', country: '中国',
+                    img: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=200&q=80' },
+                { id: 'fuji', name: '富士山', nameEn: 'Mount Fuji', country: '日本',
+                    img: 'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=200&q=80' },
+                { id: 'bali', name: '巴厘岛', nameEn: 'Bali', country: '印度尼西亚',
+                    img: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200&q=80' },
+                { id: 'santorini', name: '圣托里尼', nameEn: 'Santorini', country: '希腊',
+                    img: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=200&q=80' },
+                { id: 'banff', name: '班夫国家公园', nameEn: 'Banff', country: '加拿大',
+                    img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=200&q=80' },
+                { id: 'norway', name: '挪威峡湾', nameEn: 'Norwegian Fjords', country: '挪威',
+                    img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80' },
+                { id: 'sahara', name: '撒哈拉沙漠', nameEn: 'Sahara', country: '摩洛哥',
+                    img: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=200&q=80' },
+                { id: 'grandcanyon', name: '大峡谷', nameEn: 'Grand Canyon', country: '美国',
+                    img: 'https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=200&q=80' },
+                { id: 'provence', name: '普罗旺斯', nameEn: 'Provence', country: '法国',
+                    img: 'https://images.unsplash.com/photo-1499002238440-d264edd596ec?w=200&q=80' },
+            ];
+
+            let searchHistory = JSON.parse(localStorage.getItem('wl_search_history') || '[]');
+            let favorites = JSON.parse(localStorage.getItem('wl_favorites') || '[]');
+
+            // ==================== Toast ====================
+            let toastTimer;
+
+            function showToast(msg) {
+                clearTimeout(toastTimer);
+                toast.textContent = msg;
+                toast.classList.add('show');
+                toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+            }
+
+            window.showPlaceToast = function(name, location) {
+                showToast('📍 ' + name + ' · ' + location);
+            };
+
+            // ==================== 搜索建议 ====================
+            function getSuggestions(query) {
+                if (!query || query.trim().length < 1) return [];
+                const q = query.trim().toLowerCase();
+                return destinationsDB.filter(d => {
+                    return d.name.toLowerCase().includes(q) ||
+                        d.nameEn.toLowerCase().includes(q) ||
+                        d.country.toLowerCase().includes(q);
+                }).slice(0, 8);
+            }
+
+            function renderSuggestions(suggestions) {
+                if (!searchSuggestions) return;
+                if (suggestions.length === 0) {
+                    searchSuggestions.style.display = 'none';
+                    return;
+                }
+                searchSuggestions.innerHTML = suggestions.map(d => `
+                            <div class="suggestion-item" data-name="${d.name}">
+                                <img src="${d.img}" alt="${d.name}" loading="lazy">
+                                <div>
+                                    <div style="font-weight:500;">${d.name}</div>
+                                    <div style="font-size:0.7rem;color:rgba(255,255,255,0.45);">${d.nameEn} · ${d.country}</div>
+                                </div>
+                            </div>
+                        `).join('');
+                searchSuggestions.style.display = 'block';
+                searchSuggestions.querySelectorAll('.suggestion-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const name = item.getAttribute('data-name');
+                        if (searchInput) searchInput.value = name;
+                        searchSuggestions.style.display = 'none';
+                        if (!searchHistory.includes(name)) {
+                            searchHistory.unshift(name);
+                            if (searchHistory.length > 10) searchHistory.pop();
+                            localStorage.setItem('wl_search_history', JSON.stringify(searchHistory));
+                        }
+                        showToast('🔍 搜索：' + name + ' · 探索更多美景');
+                    });
+                });
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    renderSuggestions(getSuggestions(searchInput.value));
+                });
+                searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const val = searchInput.value.trim();
+                        if (val) {
+                            searchSuggestions.style.display = 'none';
+                            if (!searchHistory.includes(val)) {
+                                searchHistory.unshift(val);
+                                if (searchHistory.length > 10) searchHistory.pop();
+                                localStorage.setItem('wl_search_history', JSON.stringify(searchHistory));
+                            }
+                            showToast('🔍 搜索：' + val + ' · 探索更多美景');
+                        }
+                    }
+                });
+                searchInput.addEventListener('focus', () => {
+                    if (searchInput.value.trim()) renderSuggestions(getSuggestions(searchInput.value));
+                });
+                document.addEventListener('click', (e) => {
+                    if (searchSuggestions && !searchInput.contains(e.target) && !searchSuggestions
+                        .contains(e.target)) {
+                        searchSuggestions.style.display = 'none';
+                    }
+                });
+            }
+
+            // ==================== 收藏 & 用户 ====================
+            window.toggleFavorites = function() {
+                if (favorites.length === 0) {
+                    showToast('❤️ 收藏夹为空，浏览美景并添加收藏吧');
+                } else {
+                    const names = favorites.slice(0, 5).join('、');
+                    showToast('❤️ 收藏：' + names + (favorites.length > 5 ? '...' : ''));
+                }
+            };
+            window.showUserInfo = function() {
+                showToast('👤 漫游者 · 欢迎回来');
+            };
+
+            // ==================== 页面切换 ====================
+            function updatePageClasses(targetIndex) {
+                pages.forEach((page, i) => {
+                    page.classList.remove('active', 'above', 'below', 'hidden-page');
+                    if (i === targetIndex) {
+                        page.classList.add('active');
+                    } else if (i < targetIndex) {
+                        page.classList.add('above');
+                    } else if (i > targetIndex) {
+                        page.classList.add('below');
+                    }
+                });
+                // 更新指示器
+                indicatorDots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === targetIndex);
+                });
+            }
+
+            function triggerTransitionParticles(direction) {
+                // direction: 1 = 向下, -1 = 向上
+                if (!transitionCtx || !transitionCanvas) return;
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                const w = transitionCanvas.clientWidth;
+                const h = transitionCanvas.clientHeight;
+                transitionCanvas.width = w * dpr;
+                transitionCanvas.height = h * dpr;
+                transitionCtx.setTransform(1, 0, 0, 1, 0, 0);
+                transitionCtx.scale(dpr, dpr);
+
+                const particles = [];
+                const count = 120;
+                const startY = direction > 0 ? -20 : h + 20;
+                const endY = direction > 0 ? h + 20 : -20;
+
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * w,
+                        y: startY + (Math.random() - 0.5) * 80,
+                        r: Math.random() * 3.5 + 1,
+                        speed: (Math.random() * 6 + 3) * direction,
+                        opacity: Math.random() * 0.8 + 0.2,
+                        life: 1,
+                        decay: Math.random() * 0.012 + 0.006,
+                        color: ['#FFD700', '#FFA040', '#FFE0B0', '#FFF', '#FFC060', '#FFE8D0'][Math.floor(Math
+                            .random() * 6)],
+                    });
+                }
+
+                transitionCanvas.style.opacity = '1';
+
+                function animateTransitionParticles() {
+                    transitionCtx.clearRect(0, 0, w, h);
+                    let allDead = true;
+                    particles.forEach(p => {
+                        p.y += p.speed;
+                        p.life -= p.decay;
+                        if (p.life <= 0 || p.y < -30 || p.y > h + 30) return;
+                        allDead = false;
+                        const alpha = p.opacity * p.life;
+                        transitionCtx.beginPath();
+                        transitionCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        transitionCtx.fillStyle = p.color.replace(')', `, ${alpha})`).replace(
+                            'rgb',
+                            'rgba');
+                        if (p.color.startsWith('#')) {
+                            const hex = p.color;
+                            const rr = parseInt(hex.slice(1, 3), 16);
+                            const gg = parseInt(hex.slice(3, 5), 16);
+                            const bb = parseInt(hex.slice(5, 7), 16);
+                            transitionCtx.fillStyle = `rgba(${rr},${gg},${bb},${alpha})`;
+                        }
+                        transitionCtx.fill();
+                        // 发光尾迹
+                        if (p.r > 2 && p.life > 0.3) {
+                            transitionCtx.beginPath();
+                            transitionCtx.arc(p.x, p.y - p.speed * 0.3, p.r * 1.8, 0, Math.PI * 2);
+                            transitionCtx.fillStyle =
+                                `rgba(${rr || 255},${gg || 200},${bb || 150},${alpha * 0.2})`;
+                            transitionCtx.fill();
+                        }
+                    });
+                    if (allDead) {
+                        transitionCanvas.style.opacity = '0';
+                        return;
+                    }
+                    requestAnimationFrame(animateTransitionParticles);
+                }
+                requestAnimationFrame(animateTransitionParticles);
+                // 强制超时隐藏
+                setTimeout(() => { transitionCanvas.style.opacity = '0'; }, TRANSITION_DURATION + 400);
+            }
+
+            function navigateToPage(targetIndex, direction) {
+                if (isTransitioning || targetIndex === currentPage || targetIndex < 0 || targetIndex >= TOTAL_PAGES)
+                    return;
+                isTransitioning = true;
+                const dir = direction || (targetIndex > currentPage ? 1 : -1);
+                triggerTransitionParticles(dir);
+                updatePageClasses(targetIndex);
+                currentPage = targetIndex;
+                clearTimeout(transitionTimeout);
+                transitionTimeout = setTimeout(() => {
+                    isTransitioning = false;
+                }, TRANSITION_DURATION + 200);
+            }
+
+            // ==================== 事件监听 ====================
+            // 鼠标滚轮
+            let wheelAccumulator = 0;
+            const wheelThreshold = 50;
+            let wheelDebounce = 0;
+
+            window.addEventListener('wheel', (e) => {
+                if (isTransitioning) return;
+                const now = Date.now();
+                if (now - wheelDebounce < 400) {
+                    wheelAccumulator += Math.abs(e.deltaY);
+                    return;
+                }
+                wheelDebounce = now;
+                wheelAccumulator = Math.abs(e.deltaY);
+                if (e.deltaY > 30 && currentPage < TOTAL_PAGES - 1) {
+                    navigateToPage(currentPage + 1, 1);
+                } else if (e.deltaY < -30 && currentPage > 0) {
+                    navigateToPage(currentPage - 1, -1);
+                }
+            }, { passive: true });
+
+            // 触摸滑动
+            let touchStartY = 0;
+            let touchMoved = false;
+            window.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY;
+                touchMoved = false;
+            }, { passive: true });
+            window.addEventListener('touchmove', (e) => {
+                touchMoved = true;
+            }, { passive: true });
+            window.addEventListener('touchend', (e) => {
+                if (!touchMoved || isTransitioning) return;
+                const diff = touchStartY - e.changedTouches[0].clientY;
+                if (Math.abs(diff) > 40) {
+                    if (diff > 0 && currentPage < TOTAL_PAGES - 1) {
+                        navigateToPage(currentPage + 1, 1);
+                    } else if (diff < 0 && currentPage > 0) {
+                        navigateToPage(currentPage - 1, -1);
+                    }
+                }
+            });
+
+            // 键盘导航
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown' || e.key === 'j') {
+                    e.preventDefault();
+                    if (currentPage < TOTAL_PAGES - 1) navigateToPage(currentPage + 1, 1);
+                } else if (e.key === 'ArrowUp' || e.key === 'k') {
+                    e.preventDefault();
+                    if (currentPage > 0) navigateToPage(currentPage - 1, -1);
+                } else if (e.key === 'Home') {
+                    e.preventDefault();
+                    navigateToPage(0, -1);
+                } else if (e.key === 'End') {
+                    e.preventDefault();
+                    navigateToPage(TOTAL_PAGES - 1, 1);
+                } else if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                    e.preventDefault();
+                    if (currentPage === 0 && searchInput) searchInput.focus();
+                    else if (currentPage !== 0) {
+                        navigateToPage(0, -1);
+                        setTimeout(() => { if (searchInput) searchInput.focus(); }, TRANSITION_DURATION + 100);
+                    }
+                } else if (e.key === 'Escape') {
+                    if (searchSuggestions) searchSuggestions.style.display = 'none';
+                }
+            });
+
+            // 指示器点击
+            indicatorDots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const target = parseInt(dot.getAttribute('data-target'));
+                    if (target !== currentPage) {
+                        navigateToPage(target, target > currentPage ? 1 : -1);
+                    }
+                });
+            });
+
+            // ==================== 粒子系统 ====================
+            const particleSystems = {};
+
+            function createParticleSystem(canvasId, config) {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) return null;
+                const ctx = canvas.getContext('2d');
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                let w, h, particles = [];
+                const defaults = {
+                    count: 80,
+                    minR: 0.6,
+                    maxR: 2.5,
+                    minSpeed: 0.2,
+                    maxSpeed: 1.2,
+                    colors: ['rgba(255,255,255,0.7)'],
+                    glowColors: ['rgba(255,255,255,0.15)'],
+                    driftX: 0.3,
+                    driftY: 0,
+                    spawnEdge: 'top',
+                    respawn: true,
+                };
+                const cfg = { ...defaults, ...config };
+
+                function resize() {
+                    w = canvas.clientWidth;
+                    h = canvas.clientHeight;
+                    canvas.width = w * dpr;
+                    canvas.height = h * dpr;
+                    ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    ctx.scale(dpr, dpr);
+                }
+
+                function spawnParticle() {
+                    let x, y;
+                    if (cfg.spawnEdge === 'top') { x = Math.random() * w;
+                        y = -15; } else if (cfg.spawnEdge === 'bottom') { x = Math.random() * w;
+                        y = h + 15; } else if (cfg.spawnEdge === 'random') { x = Math.random() * w;
+                        y = Math.random() * h; } else { x = Math.random() * w;
+                        y = Math.random() * h; }
+                    return {
+                        x,
+                        y,
+                        r: cfg.minR + Math.random() * (cfg.maxR - cfg.minR),
+                        speed: cfg.minSpeed + Math.random() * (cfg.maxSpeed - cfg.minSpeed),
+                        opacity: 0.25 + Math.random() * 0.75,
+                        driftX: (Math.random() - 0.5) * cfg.driftX * 2,
+                        driftY: cfg.driftY + (Math.random() - 0.5) * 0.4,
+                        color: cfg.colors[Math.floor(Math.random() * cfg.colors.length)],
+                        glowColor: cfg.glowColors[Math.floor(Math.random() * cfg.glowColors.length)],
+                        wobbleAmp: Math.random() * 2,
+                        wobbleSpeed: Math.random() * 0.02 + 0.005,
+                    };
+                }
+
+                function initParticles() {
+                    particles = [];
+                    for (let i = 0; i < cfg.count; i++) {
+                        const p = spawnParticle();
+                        p.y = Math.random() * h; // 初始随机分布
+                        particles.push(p);
+                    }
+                }
+
+                function draw(timestamp) {
+                    ctx.clearRect(0, 0, w, h);
+                    const time = timestamp * 0.001;
+                    particles.forEach(p => {
+                        p.y += p.speed;
+                        p.x += p.driftX + Math.sin(time * p.wobbleSpeed * 50 + p.y * 0.03) * p
+                            .wobbleAmp * 0.4;
+                        p.y += p.driftY;
+                        if (cfg.respawn) {
+                            if (cfg.spawnEdge === 'top' && p.y > h + 20) { const np = spawnParticle();
+                                p.x = np.x;
+                                p.y = np.y;
+                                p.r = np.r;
+                                p.opacity = np.opacity;
+                                p.color = np.color;
+                                p.glowColor = np.glowColor; } else if (cfg.spawnEdge === 'bottom' && p.y <
+                                -20) { const np = spawnParticle();
+                                p.x = np.x;
+                                p.y = np.y;
+                                p.r = np.r;
+                                p.opacity = np.opacity;
+                                p.color = np.color;
+                                p.glowColor = np.glowColor; }
+                            if (p.x > w + 20) p.x = -20;
+                            if (p.x < -20) p.x = w + 20;
+                        }
+                        const alpha = p.opacity;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color.replace('0.7', String(alpha)).replace('0.8', String(
+                            alpha)).replace('0.9', String(alpha));
+                        ctx.fill();
+                        if (p.r > 1.5 && alpha > 0.4) {
+                            ctx.beginPath();
+                            ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2);
+                            ctx.fillStyle = p.glowColor.replace('0.15', String(alpha * 0.18));
+                            ctx.fill();
+                        }
+                    });
+                    return particles.length > 0;
+                }
+
+                resize();
+                initParticles();
+                return { ctx, canvas, draw, resize, cfg, particles };
+            }
+
+            function startParticleLoop(system) {
+                if (!system) return;
+                function loop(ts) {
+                    if (system.draw(ts)) {
+                        system._raf = requestAnimationFrame(loop);
+                    }
+                }
+                system._raf = requestAnimationFrame(loop);
+                return system;
+            }
+
+            function stopParticleLoop(system) {
+                if (system && system._raf) {
+                    cancelAnimationFrame(system._raf);
+                    system._raf = null;
+                }
+            }
+
+            // 初始化各页粒子
+            const sys1 = createParticleSystem('particles-page1', {
+                count: 70,
+                minR: 0.5,
+                maxR: 2.2,
+                minSpeed: 0.3,
+                maxSpeed: 1,
+                colors: ['rgba(255,255,255,0.75)', 'rgba(220,230,255,0.7)', 'rgba(240,245,255,0.8)'],
+                glowColors: ['rgba(200,220,255,0.12)', 'rgba(255,255,255,0.1)'],
+                driftX: 0.5,
+                driftY: 0,
+                spawnEdge: 'top',
+            });
+            const sys2 = createParticleSystem('particles-page2', {
+                count: 60,
+                minR: 0.8,
+                maxR: 3,
+                minSpeed: 0.15,
+                maxSpeed: 0.7,
+                colors: ['rgba(255,200,80,0.7)', 'rgba(255,180,60,0.65)', 'rgba(255,220,140,0.75)',
+                    'rgba(255,240,200,0.7)'],
+                glowColors: ['rgba(255,180,60,0.2)', 'rgba(255,200,100,0.18)'],
+                driftX: 0.8,
+                driftY: -0.2,
+                spawnEdge: 'random',
+            });
+            const sys3 = createParticleSystem('particles-page3', {
+                count: 55,
+                minR: 0.6,
+                maxR: 2.8,
+                minSpeed: 0.2,
+                maxSpeed: 0.9,
+                colors: ['rgba(255,140,50,0.7)', 'rgba(255,100,30,0.65)', 'rgba(255,180,80,0.7)',
+                    'rgba(255,200,120,0.6)'],
+                glowColors: ['rgba(255,120,40,0.22)', 'rgba(255,150,60,0.18)'],
+                driftX: 1,
+                driftY: 0.15,
+                spawnEdge: 'random',
+            });
+            const sys4 = createParticleSystem('particles-page4', {
+                count: 90,
+                minR: 0.4,
+                maxR: 2,
+                minSpeed: 0.1,
+                maxSpeed: 0.55,
+                colors: ['rgba(150,220,180,0.65)', 'rgba(180,200,240,0.6)', 'rgba(200,240,220,0.7)',
+                    'rgba(140,180,220,0.65)', 'rgba(255,255,255,0.7)'],
+                glowColors: ['rgba(100,200,160,0.15)', 'rgba(150,180,220,0.12)', 'rgba(200,240,200,0.1)'],
+                driftX: 1.5,
+                driftY: 0.1,
+                spawnEdge: 'random',
+            });
+
+            const allSystems = [sys1, sys2, sys3, sys4].filter(Boolean);
+            allSystems.forEach(s => startParticleLoop(s));
+
+            // ==================== 第一页昼夜循环 ====================
+            let dayNightPhase = 0; // 0-1 表示昼夜循环位置
+            let dayNightDirection = 1;
+            const CYCLE_SPEED = 0.00012; // 非常缓慢的循环速度
+
+            function updateDayNightCycle(timestamp) {
+                if (!page1SkyOverlay || !page1LightRays) return;
+                dayNightPhase += dayNightDirection * CYCLE_SPEED;
+                if (dayNightPhase >= 1) { dayNightPhase = 1;
+                    dayNightDirection = -1; }
+                if (dayNightPhase <= 0) { dayNightPhase = 0;
+                    dayNightDirection = 1; }
+
+                const phase = dayNightPhase; // 0=深夜, 0.3=黎明, 0.5=日出/白天, 0.7=黄昏, 1=日落回夜
+
+                // 天空叠加层颜色
+                let topR, topG, topB, topA;
+                let midR, midG, midB, midA;
+                let botR, botG, botB, botA;
+                let raysOpacity;
+
+                if (phase < 0.25) {
+                    // 深夜
+                    const t = phase / 0.25;
+                    topR = 10;
+                    topG = 18;
+                    topB = 45;
+                    topA = 0.5 + t * 0.1;
+                    midR = 14;
+                    midG = 22;
+                    midB = 55;
+                    midA = 0.35 + t * 0.05;
+                    botR = 8;
+                    botG = 12;
+                    botB = 28;
+                    botA = 0.65 + t * 0.05;
+                    raysOpacity = 0;
+                } else if (phase < 0.4) {
+                    // 黎明
+                    const t = (phase - 0.25) / 0.15;
+                    topR = 30 + t * 60;
+                    topG = 25 + t * 40;
+                    topB = 55 + t * 30;
+                    topA = 0.55 - t * 0.15;
+                    midR = 40 + t * 70;
+                    midG = 35 + t * 50;
+                    midB = 60 + t * 20;
+                    midA = 0.4 - t * 0.1;
+                    botR = 20 + t * 30;
+                    botG = 18 + t * 25;
+                    botB = 35 + t * 15;
+                    botA = 0.6 - t * 0.15;
+                    raysOpacity = t * 0.4;
+                } else if (phase < 0.55) {
+                    // 日出/白天
+                    const t = (phase - 0.4) / 0.15;
+                    topR = 90 + t * 50;
+                    topG = 65 + t * 80;
+                    topB = 85 + t * 80;
+                    topA = 0.4 - t * 0.15;
+                    midR = 110 + t * 60;
+                    midG = 85 + t * 90;
+                    midB = 80 + t * 60;
+                    midA = 0.3 - t * 0.1;
+                    botR = 50 + t * 20;
+                    botG = 43 + t * 40;
+                    botB = 50 + t * 30;
+                    botA = 0.45 - t * 0.2;
+                    raysOpacity = 0.4 + t * 0.5;
+                } else if (phase < 0.7) {
+                    // 黄昏
+                    const t = (phase - 0.55) / 0.15;
+                    topR = 140 - t * 80;
+                    topG = 145 - t * 100;
+                    topB = 165 - t * 90;
+                    topA = 0.25 + t * 0.2;
+                    midR = 170 - t * 100;
+                    midG = 175 - t * 110;
+                    midB = 140 - t * 60;
+                    midA = 0.2 + t * 0.15;
+                    botR = 70 - t * 30;
+                    botG = 83 - t * 50;
+                    botB = 80 - t * 30;
+                    botA = 0.25 + t * 0.3;
+                    raysOpacity = 0.9 - t * 0.6;
+                } else {
+                    // 日落回夜
+                    const t = (phase - 0.7) / 0.3;
+                    topR = 60 - t * 50;
+                    topG = 45 - t * 27;
+                    topB = 75 - t * 30;
+                    topA = 0.45 + t * 0.1;
+                    midR = 70 - t * 56;
+                    midG = 65 - t * 43;
+                    midB = 80 - t * 25;
+                    midA = 0.35 + t * 0.05;
+                    botR = 40 - t * 32;
+                    botG = 33 - t * 21;
+                    botB = 50 - t * 22;
+                    botA = 0.55 + t * 0.1;
+                    raysOpacity = 0.3 - t * 0.3;
+                }
+
+                raysOpacity = Math.max(0, Math.min(0.8, raysOpacity));
+                page1SkyOverlay.style.background = `linear-gradient(180deg,
+                    rgba(${Math.round(topR)},${Math.round(topG)},${Math.round(topB)},${topA.toFixed(3)}) 0%,
+                    rgba(${Math.round(midR)},${Math.round(midG)},${Math.round(midB)},${midA.toFixed(3)}) 35%,
+                    rgba(${Math.round(botR)},${Math.round(botG)},${Math.round(botB)},${botA.toFixed(3)}) 100%)`;
+                page1LightRays.style.opacity = raysOpacity.toFixed(2);
+
+                // 帐篷光晕随昼夜变化
+                if (tentGlowOrb) {
+                    const glowStrength = phase < 0.3 || phase > 0.65 ? 0.45 + (1 - Math.abs(phase - 0.15) * 2) * 0.3 :
+                        0.05;
+                    tentGlowOrb.style.opacity = Math.max(0.05, glowStrength).toFixed(2);
+                }
+            }
+
+            // ==================== Resize处理 ====================
+            function handleResize() {
+                allSystems.forEach(s => {
+                    if (s && s.resize) s.resize();
+                });
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                transitionCanvas.width = transitionCanvas.clientWidth * dpr;
+                transitionCanvas.height = transitionCanvas.clientHeight * dpr;
+            }
+            window.addEventListener('resize', handleResize);
+
+            // ==================== 全局动画循环 ====================
+            function globalLoop(timestamp) {
+                updateDayNightCycle(timestamp);
+                requestAnimationFrame(globalLoop);
+            }
+
+            // ==================== 初始化 ====================
+            function init() {
+                updatePageClasses(0);
+                handleResize();
+                requestAnimationFrame(globalLoop);
+
+                // 隐藏加载画面
+                setTimeout(() => {
+                    if (loaderOverlay) {
+                        loaderOverlay.style.opacity = '0';
+                        setTimeout(() => {
+                            if (loaderOverlay) loaderOverlay.style.display = 'none';
+                        }, 600);
+                    }
+                }, 700);
+
+                console.log('%c🏔️ Wanderlust 漫游者 %c已就绪 %c| %c4页沉浸式体验',
+                    'color:#FFD700;font-size:1.2em;', 'color:#fff;', 'color:#aaa;', 'color:#165DFF;');
+                console.log('%c💡 滚轮切换页面 | 键盘↑↓ | 右侧导航点 | Ctrl+F搜索 | ESC关闭',
+                    'color:rgba(255,255,255,0.55);');
+                console.log('%c🌅 第一页正在展示昼夜循环效果...', 'color:#FFA040;');
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+
+            // ==================== 暴露API ====================
+            window.navigateToPage = navigateToPage;
+            window.getCurrentPage = () => currentPage;
+            window.getTotalPages = () => TOTAL_PAGES;
+        })();
+    </script>
+</body>
+</html>
